@@ -1,5 +1,6 @@
 % Nicolas Daniel Occhi
 
+% asdasd
 
 :- begin_tests(kioskito).
 
