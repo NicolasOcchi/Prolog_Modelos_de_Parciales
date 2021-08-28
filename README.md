@@ -4,7 +4,7 @@ Sueños ✔\
 Kioskito ✔ (el profe lo resolvió en clase también recomiendo, ver su resolución)\
 El Asadito ❌ Incompleto, ver dudas\
 Café Veloz ❌ Incompleto, ver dudas\
-Dentista ❌ NO recomendado por el profe, o hacerlo después de terminar los demas
+Dentistas ❌ Incompleto, ver dudas. (enrealidad el profe NO lo recomendé, o dijo hacerlo después de terminar los demas)\
 
 ## Dudas
 
@@ -14,3 +14,7 @@ Dentista ❌ NO recomendado por el profe, o hacerlo después de terminar los dem
 
 #### Cafe Veloz
  - Punto 5: la suma de las alteraciones de la sustancias no me estaría saliendo.
+
+#### Dentistas
+ - Punto 6: no me sale
+ - Punto 7: no me sale
