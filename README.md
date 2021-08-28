@@ -1,10 +1,14 @@
-# PROLOG: Modelos de Parciales de Dodino y Contador 
+# PROLOG: Modelos de Parciales 
 
-Sueños ✔\
-Kioskito ✔ (el profe lo resolvió en clase también recomiendo, ver su resolución)\
-El Asadito ❌ Incompleto, ver dudas\
-Café Veloz ❌ Incompleto, ver dudas\
-Dentistas ❌ Incompleto, ver dudas. (enrealidad el profe NO lo recomendé, o dijo hacerlo después de terminar los demas)\
+## de Dodino y Contador
+- Sueños ✔\
+- Kioskito ✔ (el profe lo resolvió en clase también recomiendo, ver su resolución)\
+- El Asadito ❌ Incompleto, ver dudas\
+- Café Veloz ❌ Incompleto, ver dudas\
+- Dentistas ❌ Incompleto, ver dudas. (enrealidad el profe NO lo recomendé, o dijo hacerlo después de terminar los demas)\
+
+## Otros profes
+- Harry Potter\
 
 ## Dudas
 
