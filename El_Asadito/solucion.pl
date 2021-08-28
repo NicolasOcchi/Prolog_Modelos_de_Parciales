@@ -132,9 +132,14 @@ asadoFlojito(FechaAsado):-
 
 
 % 5) Al incorporar esta serie de hechos
-% hablo(fecha(15,09,2011), flor, pablo). hablo(fecha(22,09,2011), flor, marina).
-% hablo(fecha(15,09,2011), pablo, leo). hablo(fecha(22,09,2011), marina, pablo).
-% hablo(fecha(15,09,2011), leo, fer). reservado(marina).
+
+hablo(fecha(15,09,2011), flor, pablo).
+hablo(fecha(22,09,2011), flor, marina).
+hablo(fecha(15,09,2011), pablo, leo).
+hablo(fecha(22,09,2011), marina, pablo).
+hablo(fecha(15,09,2011), leo, fer).
+reservado(marina).
+
 % Definir el predicado chismeDe/3, que relaciona la fecha de un asado y dos personas cuando la primera
 % conoce algún chisme de la segunda, porque
 % - la segunda le contó directamente a la primera (según predicado hablo/3), o
@@ -148,6 +153,17 @@ asadoFlojito(FechaAsado):-
 % false. (marina conoce los chismes de flor porque le contó, pero pablo no sabe nada de marina ni de flor
 % porque marina es reservada). Nota importante: no repetir código.
 
+% es una recursividad de clasica pero apenas cambia porque el orden de los parametros es 
+% un poco diferente al patron de siempre. 
+
+% caso base
+chismeDe(FechaAsado, PersonaQueConoceChisme, Persona):-
+	hablo(FechaAsado, Persona, PersonaQueConoceChisme). % consideramos que la primer persona le cuenta chismes a la segunda.
+% caso recursivo
+chismeDe(FechaAsado, PersonaQueConoceChisme, Persona):-
+	hablo(FechaAsado, Persona, UnTerceroQueCuentaUnChistme),
+	not(reservado(UnTerceroQueCuentaUnChistme)),
+	chismeDe(FechaAsado, PersonaQueConoceChisme, UnTerceroQueCuentaUnChistme).
 
 % 6) Definir el predicado disfruto/2, relaciona a una persona que pudo comer al menos 3 cosas que le
 % gustan en un asado al que haya asistido.
@@ -159,7 +175,7 @@ asadoFlojito(FechaAsado):-
 disfruto(Persona, FechaAsado):- 
 	amigo(Persona),
 	asistio(FechaAsado, Persona),
-	findall(Comida, (asado(FechaAsado, Comida), leGusta(Persona, Comida)), ComidasServidasQueLeGustanALaPersona),
+	findall(Comida, (asado(FechaAsado, Comida), leGusta(Persona, Comida)), ComidasQueLeGustanALaPersona),
 	length(ComidasQueLeGustanALaPersona, CantComidas),
 	CantComidas >= 3.
 
@@ -172,15 +188,18 @@ disfruto(Persona, FechaAsado):-
 % Comidas = [morfi(vacio)] ; Comidas = [morfi(mondiola), morfi(asado)] ; Comidas =
 % [morfi(mondiola)] ; entre otros son posibles soluciones (tiene que haber comidas)
 
+asadoSinComidas([]).
+
 asadoRico(Comidas):-
 	findall(Comida, esRica(Comida), ComidasRicas),
-	combinacionesRicas(ComidasRicas, Comidas).
-	
+	combinacionesRicas(ComidasRicas, Comidas),
+	not(asadoSinComidas(Comidas)).
+
 combinacionesRicas([],[]).
 combinacionesRicas([Comida|Comidas], [Comida|Posibles]):-
 	esRica(Comida),
 	combinacionesRicas(Comidas, Posibles).
-combinacionesRicas([Comida|Comidas], Posibles):-
+combinacionesRicas([_|Comidas], Posibles):-
 	combinacionesRicas(Comidas, Posibles).
 
 
