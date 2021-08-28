@@ -132,10 +132,6 @@ nivelFalopez(efedrina, 10).
 nivelFalopez(cocaina, 100).
 nivelFalopez(extasis, 120).
 nivelFalopez(omeprazol, 5).
-% predicado agregado para que funcione el maplist
-nivelFalopez(Sustancia, 0):-
-	not((nivelFalopez(OtraSustancia,_), Sustancia \= OtraSustancia)).  % nos fijamos que la sustancia no se encuentre dentro de la base de conocimientos
-	
 
 % Definir el predicado cuantaFalopaTiene/2, que relaciona el nivel de alteración en sangre que tiene
 % un jugador, considerando que:
@@ -148,19 +144,13 @@ nivelFalopez(Sustancia, 0):-
 % Jugador = maradona, Cantidad = 140 ;  tomó efedrina (10) y cafeVeloz (130)
 % Jugador = chamot, Cantidad = 130 ;  tomó cafeVeloz (130)
 
-maplist(_, [], []).
-maplist(PredicadoTransformador, [Orig|Origs], [Transf|Transfs]):-
-     call(PredicadoTransformador, Orig, Transf),
-     maplist(PredicadoTransformador, Origs, Transfs).
 
-filter(Criterio, ListaOriginal, ListaNueva):-
-   findall(Elem, 
-           (member(Elem, ListaOriginal), call(Criterio, Elem)),
-           ListaNueva).
+cuantaFalopaTiene(Jugador, AlteracionEnSangreTotal):-
+	jugador(Jugador),
+	findall(AlteracionEnSangre, (tomo(Jugador, CosaIngerida), nivelDeAlteracion(CosaIngerida, AlteracionEnSangre)), Alteraciones),
+	sum_list(Alteraciones, AlteracionEnSangreTotal).
 
-
-% cuantaFalopaTiene(Jugador, AlteracionEnSangre):-
-
+% predicados auxiliares
 nivelDeAlteracion(producto(_, _), AlteracionEnSangre):- AlteracionEnSangre is 0.
 
 nivelDeAlteracion(sustancia(NombreSustancia), AlteracionEnSangre):- 
@@ -168,10 +158,28 @@ nivelDeAlteracion(sustancia(NombreSustancia), AlteracionEnSangre):-
 
 nivelDeAlteracion(compuesto(NombreCompuesto), AlteracionEnSangre):-
 	composicion(NombreCompuesto, IngredientesDelCompuesto),
-	maplist(nivelFalopez, IngredientesDelCompuesto, NivelesDeFalopezDeIngredientes),
-	sum_list(NivelesDeFalopezDeIngredientes, AlteracionEnSangre).
-% no funciona bien, si no encuentra la sustancia tira false y no puede encontrar la alteracion en sangre
+	maplist(nivelFalopezIngredientesDeCompuestos, IngredientesDelCompuesto, NivelesDeFalopezDeLosIngredientes),
+	sum_list(NivelesDeFalopezDeLosIngredientes, AlteracionEnSangre).
 
+% predicado sacado del apunte Modulo 7
+maplist(_, [], []).
+maplist(PredicadoTransformador, [Orig|Origs], [Transf|Transfs]):-
+     call(PredicadoTransformador, Orig, Transf),
+     maplist(PredicadoTransformador, Origs, Transfs).
+
+/* 
+predicado auxiliar || en el caso de que el compuesto no se encuentre 
+en la base de conocimientos se define 0 su nivel de alteracion en sangre.
+
+si no se agrega este predicado, al hacer el maplist, puede dar false cuando
+aparece una sustancia que no esta en la base.
+*/
+nivelFalopezIngredientesDeCompuestos(IngredientesDelCompuesto, AlteracionEnSangre):-
+	not(nivelFalopez(IngredientesDelCompuesto, _)),
+	AlteracionEnSangre is 0.
+nivelFalopezIngredientesDeCompuestos(IngredientesDelCompuesto, AlteracionEnSangre):-
+	nivelFalopez(IngredientesDelCompuesto, AlteracionEnSangre).
+	
 % 6) Definir el predicado medicoConProblemas/1, que se satisface si un médico atiende a más de 3
 % jugadores conflictivos, esto es
 % - que pueden ser suspendidos o
