@@ -8,7 +8,7 @@
 - Dentistas ❌ Incompleto, ver dudas. (enrealidad el profe NO lo recomendé, o dijo hacerlo después de terminar los demas)
 
 ## de otros profes
-- Harry Potter
+- Casas de Hogwarts
 
 ## Dudas
 
