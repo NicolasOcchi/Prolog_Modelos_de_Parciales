@@ -5,7 +5,7 @@
 - Kioskito ✔ (el profe lo resolvió en clase también recomiendo, ver su resolución)
 - El Asadito ❌ Incompleto, ver dudas
 - Café Veloz ❌ Incompleto, ver dudas
-- Dentistas ❌ Incompleto, ver dudas. (enrealidad el profe NO lo recomendé, o dijo hacerlo después de terminar los demas)
+- Dentistas ❌ Incompleto, ver dudas. (en realidad el profe NO lo recomendó, o dijo hacerlo después de terminar los demas)
 
 ## de otros profes
 - Casas de Hogwarts
