@@ -9,7 +9,7 @@
 
 ## de otros profes
 - Casas de Hogwarts ✔
-- Alquimio
+- Alquimio (me lo pasó un compañero de curso, NO está en la pagina de PDP)
 
 ## Dudas
 
