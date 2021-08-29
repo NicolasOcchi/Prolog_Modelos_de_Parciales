@@ -1,8 +1,7 @@
 % Nicolas Daniel Occhi
 
 :- discontiguous ([tomo/2]). 
-% para que prolog no moleste con que 
-% los predicados no estan todos seguidos
+/* para que prolog no moleste con que los predicados no estan todos seguidos */
 
 % jugadores conocidos
 jugador(maradona).
@@ -32,12 +31,7 @@ composicion(cafeVeloz, [efedrina, ajipupa, extasis, whisky, cafe]).
 sustanciaProhibida(efedrina).
 sustanciaProhibida(cocaina).
 
-% Se pide:
-% 1) Hacer lo que sea necesario para incorporar los siguientes conocimientos:
-% a. passarella toma todo lo que no tome Maradona
-% b. pedemonti toma todo lo que toma chamot y lo que toma Maradona
-% c. basualdo no toma coca cola
-
+%%%% 1)
 
 tomo(passarella, CosaQueToma):- 
 	not(tomo(maradona, CosaQueToma)).
@@ -53,16 +47,7 @@ basualdo no toma coca cola --> NO SE MODELA, por principio de universo cerrado t
 que no se encuentra en la base de conocimiento se presume falso.
 */
 
-% 2) Definir el predicado puedeSerSuspendido/1 que relaciona si un jugador puede ser
-% suspendido en base a lo que tomó. El predicado debe ser inversible.
-% a. un jugador puede ser suspendido si tomó una sustancia que está prohibida
-% b. un jugador puede ser suspendido si tomó un compuesto que tiene una sustancia prohibida
-% c. o un jugador puede ser suspendido si tomó una cantidad excesiva de un producto
-% (más que el máximo permitido):
-% ?- puedeSerSuspendido(X).
-% X = maradona ;  tomó efedrina y cafeVeloz
-% X = chamot ;  tomó cafeVeloz
-% X = balbo ;  tomó 2 gatoreits! > 1
+%%%% 2)
 
 puedeSerSuspendido(Jugador):-
 	jugador(Jugador),
@@ -82,21 +67,12 @@ motivoSuspension(producto(ProductoIngerido, CantidadIngerida)):-
 	CantidadIngerida > MaxPermitido.
 
 
-% 3) Si agregamos los siguientes hechos:
+%%%% 4)
 
 amigo(maradona, caniggia).
 amigo(caniggia, balbo).
 amigo(balbo, chamot).
 amigo(balbo, pedemonti).
-
-% Defina el predicado malaInfluencia/2 que relaciona dos jugadores, si ambos pueden ser
-% suspendidos y además se conocen. Un jugador conoce a sus amigos y a los conocidos de sus
-% amigos.
-% ? malaInfluencia(maradona, Quien).
-% Quien = chamot ;
-% Quien = balbo ;
-% Quien = pedemonti ; (con el agregado del punto 1)
-% (Maradona no es mala influencia para Caniggia porque no lo podrían suspender)
 
 malaInfluencia(Jugador, AmigoDelJugador):-
 	jugador(Jugador),
@@ -111,7 +87,7 @@ amigoDeAmigo(AmigoDelAmigoDelJugador, AmigoDelJugador):-
 	amigo(Jugador, AmigoDelJugador),
 	amigoDeAmigo(AmigoDelAmigoDelJugador, Jugador).
 
-% 4) Agregamos ahora la lista de médicos que atiende a cada jugador
+%%%% 4)
 atiende(cahe, maradona).
 atiende(cahe, chamot).
 atiende(cahe, balbo).
@@ -119,31 +95,15 @@ atiende(zin, caniggia).
 atiende(cureta, pedemonti).
 atiende(cureta, basualdo).
 
-% Definir el predicado chanta/1, que se verifica para los médicos que sólo atienden a jugadores que
-% podrían ser suspendidos. El predicado debe ser inversible.
-% ? chanta(X).
-% X = cahe
 chanta(Medico):-
 	distinct(Medico, atiende(Medico,_)), %unifico la variable medico y pongo el distinct para que aparezca un solo resultado de cada uno
 	forall( atiende(Medico, Jugador), puedeSerSuspendido(Jugador) ).
 
-% 5) Si conocemos el nivel de alteración en sangre de una sustancia con los siguientes hechos
+%%%% 5) 
 nivelFalopez(efedrina, 10).
 nivelFalopez(cocaina, 100).
 nivelFalopez(extasis, 120).
 nivelFalopez(omeprazol, 5).
-
-% Definir el predicado cuantaFalopaTiene/2, que relaciona el nivel de alteración en sangre que tiene
-% un jugador, considerando que:
-% - todos los productos (como la coca cola y el gatoreit), no tienen nivel de alteración (asumir 0)
-% - las sustancias tienen definidas el nivel de alteración en base al predicado nivelFalopez/2
-% - los compuestos suman los niveles de falopez de cada sustancia que tienen.
-% El predicado debe ser inversible en ambos argumentos. Ej: el cafeVeloz tiene nivel 130 (120 del
-% éxtasis + 10 de la efedrina, las sustancias que no tienen nivel se asumen 0).
-% ?- cuantaFalopaTiene(Jugador, Cantidad).
-% Jugador = maradona, Cantidad = 140 ;  tomó efedrina (10) y cafeVeloz (130)
-% Jugador = chamot, Cantidad = 130 ;  tomó cafeVeloz (130)
-
 
 cuantaFalopaTiene(Jugador, AlteracionEnSangreTotal):-
 	jugador(Jugador),
@@ -151,11 +111,17 @@ cuantaFalopaTiene(Jugador, AlteracionEnSangreTotal):-
 	sum_list(Alteraciones, AlteracionEnSangreTotal).
 
 % predicados auxiliares
-nivelDeAlteracion(producto(_, _), AlteracionEnSangre):- AlteracionEnSangre is 0.
+nivelDeAlteracion(producto(_, _), 0).
 
 nivelDeAlteracion(sustancia(NombreSustancia), AlteracionEnSangre):- 
 	nivelFalopez(NombreSustancia, AlteracionEnSangre).
 
+nivelDeAlteracion(compuesto(NombreCompuesto), AlteracionEnSangre):-
+	composicion(NombreCompuesto, IngredientesDelCompuesto),
+	findall(Nivel, (member(Ingrediente, IngredientesDelCompuesto), nivelFalopez(Sustancia, Nivel)), Niveles),
+	sum_list(Nivel, AlteracionEnSangre).
+
+/* %% Alternativa con Maplist del "nivelDeAlteracion" para un compuesto
 nivelDeAlteracion(compuesto(NombreCompuesto), AlteracionEnSangre):-
 	composicion(NombreCompuesto, IngredientesDelCompuesto),
 	maplist(nivelFalopezIngredientesDeCompuestos, IngredientesDelCompuesto, NivelesDeFalopezDeLosIngredientes),
@@ -167,27 +133,21 @@ maplist(PredicadoTransformador, [Orig|Origs], [Transf|Transfs]):-
      call(PredicadoTransformador, Orig, Transf),
      maplist(PredicadoTransformador, Origs, Transfs).
 
-/* 
 predicado auxiliar || en el caso de que el compuesto no se encuentre 
 en la base de conocimientos se define 0 su nivel de alteracion en sangre.
 
 si no se agrega este predicado, al hacer el maplist, puede dar false cuando
 aparece una sustancia que no esta en la base.
-*/
+
 nivelFalopezIngredientesDeCompuestos(IngredientesDelCompuesto, AlteracionEnSangre):-
 	not(nivelFalopez(IngredientesDelCompuesto, _)),
 	AlteracionEnSangre is 0.
 nivelFalopezIngredientesDeCompuestos(IngredientesDelCompuesto, AlteracionEnSangre):-
 	nivelFalopez(IngredientesDelCompuesto, AlteracionEnSangre).
-	
-% 6) Definir el predicado medicoConProblemas/1, que se satisface si un médico atiende a más de 3
-% jugadores conflictivos, esto es
-% - que pueden ser suspendidos o
-% - que conocen a Maradona (según el punto 3, donde son amigos directos o conocen a
-% alguien que es amigo de él). El predicado debe ser inversible.
-% ? medicoConProblemas(X).
-% X = cahe
 
+*/
+
+%%%% 6) 
 medicoConProblemas(Medico):-
 	atiende(Medico,_),
 	findall(Jugador, (atiende(Medico, Jugador), jugadorConflictivo(Jugador)), JugadoresConflictivos),
@@ -200,15 +160,7 @@ jugadorConflictivo(Jugador):-
 	amigoDeAmigo(maradona, Jugador).
 
 
-% 7- Definir el predicado programaTVFantinesco/1, que permite armar una combinatoria de
-% jugadores que pueden ser suspendidos. Ej:
-% ? programaTVFantinesco(Lista)
-% Lista = []
-% Lista = [maradona]
-% Lista = [maradona, chamot]
-% Lista = [maradona, chamot, balbo]
-% etc. No importa si aparece más de una vez Maradona en su solución.
-
+%%%%% 7)
 programaTVFantinesco(Lista):-
 	findall(Jugador, distinct(Jugador, puedeSerSuspendido(Jugador)), JugadoresSuspendibles),
 	combinatoriaDeJugadores(JugadoresSuspendibles, Lista).
