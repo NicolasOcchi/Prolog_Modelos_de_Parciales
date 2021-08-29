@@ -216,9 +216,9 @@ comidaRica(achura(morci,_)). % que se hace con este? no esta dentro de la base d
 
 
 
-:- begin_tests(kioskito).
+:- begin_tests(elAsadito).
 
 	test(fakeTest):-
 		true.
 
-:- end_tests(kioskito).
+:- end_tests(elAsadito).
