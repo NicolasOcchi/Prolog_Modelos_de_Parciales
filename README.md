@@ -2,7 +2,7 @@
 
 ## de Dodino y Contador
 - Sueños ✔
-- Kioskito ✔ (el profe lo resolvió en clase también recomiendo, ver su resolución)
+- Kioskito ✔ (el profe lo resolvió en clase también)
 - El Asadito ✔ 
 - Café Veloz ✔ 
 - Dentistas ❌ Incompleto, ver dudas. (en realidad el profe NO lo recomendó, o dijo hacerlo después de terminar los demas)
