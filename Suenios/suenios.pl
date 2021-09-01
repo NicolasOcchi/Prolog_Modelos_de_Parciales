@@ -15,6 +15,9 @@ cree(macarena, campanita).
 % que no se encuentra en la base de concomiento se presume como falso.
 
 % suenio(Persona, Suenio). donde suenio es un functor.
+% entra en juego el concepto de functores que NO son predicados 
+% (por ende no tienen valor de verdad) y los utilizamos para agrupar informacion relacionada.
+
 % ganarLoterias[lista de numeros con los que se quiere ganar]
 % cantante(cantidad de disco que se quiere vender)
 % futbolista(equipo a jugar)
@@ -22,16 +25,16 @@ suenio(gabriel, ganarLoteria([5,9])).
 suenio(gabriel, futbolista(arsenal)).
 suenio(juan, cantante(100000)).
 suenio(macarena, cantante(10000)).
-
 % Macarena no quiere ganar la lotería -> NO SE MODELA por principio de universo cerrado
 % Macarena (...) sí ser cantante estilo “Eruca Sativa” -> NO MODELAMOS EL ESTILO, ya que
 % por como nos aclararon que se modela el suenio de "ser cantante" no corresponde modelar
 % el estilo
 
 
+
 %%% Punto 2 (4 puntos) %%%
-equipo(arsenal, chicos).
-equipo(aldosivi, chicos).
+equipo(arsenal, chico).
+equipo(aldosivi, chico).
 
 persona(Persona):-suenio(Persona,_).
 
@@ -47,7 +50,8 @@ esAmbiciosa(Persona):-
 	sum_list(DificultadesDeSuenios, SumaDeDificultades),
 	SumaDeDificultades > 20.
 
-% ALTERNAIVA SIN MAPLIST (se reemplaza el findall y el maplist por esto)
+% ALTERNAIVA SIN MAPLIST 
+% (se reemplaza el findall y el maplist por esto)
 % findall(Dificultad,(suenio(Persona, Suenio), dificultadSuenio(Suenio,Dificultad)), Dificultades),
 
 
@@ -112,6 +116,7 @@ amigo(campanita, conejo_De_Pascua).
 amigo(conejo_De_Pascua, cavenaghi).
 
 estaEnfermo(campanita).
+estaEnfermo(reyes_Magos).
 estaEnfermo(conejo_De_Pascua).
 % mago_Capria NO está enfermo, entonces no se modela
 
